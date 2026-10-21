@@ -1,0 +1,8 @@
+CREATE TABLE customers (
+    id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    full_name  VARCHAR(100) NOT NULL,
+    email      VARCHAR(150) NOT NULL,
+    phone      VARCHAR(20),
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uk_customers_email UNIQUE (email)
+);
