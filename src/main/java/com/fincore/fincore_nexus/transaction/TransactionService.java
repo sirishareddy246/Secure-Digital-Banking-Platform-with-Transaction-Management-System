@@ -27,7 +27,7 @@ public class TransactionService {
 
     @Transactional
     public BankTransaction deposit(Long accountId, TransactionRequest request) {
-        Account account = findActiveAccount(accountId);
+        Account account = findActiveAccountForUpdate(accountId);
         BigDecimal amount = validateAmount(request.amount());
 
         account.deposit(amount);
@@ -45,7 +45,7 @@ public class TransactionService {
 
     @Transactional
     public BankTransaction withdraw(Long accountId, TransactionRequest request) {
-        Account account = findActiveAccount(accountId);
+        Account account = findActiveAccountForUpdate(accountId);
         BigDecimal amount = validateAmount(request.amount());
 
         try {
@@ -67,8 +67,8 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    private Account findActiveAccount(Long accountId) {
-        Account account = accountRepository.findById(accountId)
+    private Account findActiveAccountForUpdate(Long accountId) {
+        Account account = accountRepository.findByIdForUpdate(accountId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Account not found"));
 
