@@ -39,3 +39,5 @@ build/
 !.env.example
 application-local.properties
 /.zip
+.mvn.zip
+zip.2.zip
