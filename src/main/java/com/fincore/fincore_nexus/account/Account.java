@@ -1,3 +1,4 @@
+
 package com.fincore.fincore_nexus.account;
 
 import com.fincore.fincore_nexus.customer.Customer;
@@ -53,7 +54,9 @@ public class Account {
     public Account(String accountNumber, Customer customer, BigDecimal initialBalance) {
         this.accountNumber = accountNumber;
         this.customer = customer;
-        this.balance = initialBalance == null ? BigDecimal.ZERO : initialBalance;
+        this.balance = initialBalance == null
+                ? BigDecimal.ZERO
+                : initialBalance;
         this.status = AccountStatus.ACTIVE;
     }
 
@@ -88,6 +91,35 @@ public class Account {
 
     public AccountStatus getStatus() {
         return status;
+    }
+
+    public void deposit(BigDecimal amount) {
+        validateAmount(amount, "Deposit");
+
+        this.balance = this.balance.add(amount);
+    }
+
+    public void withdraw(BigDecimal amount) {
+        validateAmount(amount, "Withdrawal");
+
+        if (this.balance.compareTo(amount) < 0) {
+            throw new IllegalArgumentException(
+                    "Insufficient account balance");
+        }
+
+        this.balance = this.balance.subtract(amount);
+    }
+
+    private void validateAmount(BigDecimal amount, String operation) {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException(
+                    operation + " amount must be greater than zero");
+        }
+
+        if (amount.scale() > 2) {
+            throw new IllegalArgumentException(
+                    operation + " amount cannot have more than 2 decimal places");
+        }
     }
 
     public void setStatus(AccountStatus status) {
