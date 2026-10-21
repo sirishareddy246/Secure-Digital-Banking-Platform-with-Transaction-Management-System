@@ -20,9 +20,12 @@ public class TransactionHistoryController {
     }
 
     @GetMapping
-    public List<BankTransaction> getTransactionHistory(
+    public List<TransactionResponse> getTransactionHistory(
             @PathVariable Long accountId) {
         return transactionRepository
-                .findByAccountIdOrderByCreatedAtDesc(accountId);
+                .findByAccountIdOrderByCreatedAtDesc(accountId)
+                .stream()
+                .map(TransactionResponse::from)
+                .toList();
     }
 }
